@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>peerbridge — 페이지 플로우</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <style>
+    html, body { margin: 0; padding: 0; background: #f0eee9; font-family: 'Pretendard', -apple-system, "Inter", sans-serif; }
+    * { box-sizing: border-box; }
+    button { font-family: inherit; }
+  </style>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="shared.jsx"></script>
+  <script type="text/babel" src="tokens.jsx"></script>
+  <script type="text/babel" src="brand.jsx"></script>
+  <script type="text/babel" src="app-chrome.jsx"></script>
+  <script type="text/babel" src="page-auth.jsx"></script>
+  <script type="text/babel" src="page-products.jsx"></script>
+  <script type="text/babel" src="page-product-detail.jsx"></script>
+  <script type="text/babel" src="page-dashboard.jsx"></script>
+  <script type="text/babel" src="page-deposit.jsx"></script>
+  <script type="text/babel" src="page-my-investments.jsx"></script>
+  <script type="text/babel" src="page-loan-apply.jsx"></script>
+  <script type="text/babel" src="page-loans-and-repay.jsx"></script>
+  <script type="text/babel" src="page-about.jsx"></script>
+  <script type="text/babel" src="page-admin.jsx"></script>
+  <script type="text/babel" src="page-notifications-settings.jsx"></script>
+
+  <script type="text/babel">
+    function App() {
+      const [introDone, setIntroDone] = React.useState(() => {
+        try { return sessionStorage.getItem('peerbridge_intro_done') === '1'; } catch (e) { return false; }
+      });
+      const handleIntroDone = () => {
+        try { sessionStorage.setItem('peerbridge_intro_done', '1'); } catch (e) {}
+        setIntroDone(true);
+      };
+      return (
+        <React.Fragment>
+          {!introDone && <IntroAnimation onDone={handleIntroDone} />}
+        <DesignCanvas>
+          <DCSection
+            id="auth"
+            title="① 진입 — 로그인 / 가입"
+            subtitle="처음 들어와서 계정을 만들고 로그인하는 진입점"
+          >
+            <DCArtboard id="signup" label="회원가입" sublabel="이메일/비밀번호 + 역할 선택" width={1440} height={900}>
+              <PageAuth mode="signup" />
+            </DCArtboard>
+            <DCArtboard id="login" label="로그인" sublabel="기존 사용자 진입" width={1440} height={900}>
+              <PageAuth mode="login" />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="discover"
+            title="② 탐색 — 상품 둘러보기"
+            subtitle="투자 가능한 14개 상품을 필터·검색·정렬해서 둘러보고 마음에 드는 걸 골라요"
+          >
+            <DCArtboard id="products" label="투자상품 목록" sublabel="필터/정렬, 카드 그리드, 페이지네이션" width={1440} height={1280}>
+              <PageProducts />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="invest"
+            title="③ 결정 — 상품 상세 → 투자 실행"
+            subtitle="상품 상세에서 정보를 검토하고 투자 모달로 금액·약관까지 확정"
+          >
+            <DCArtboard id="detail" label="상품 상세" sublabel="개요 / 위험 / 상환계획 + 우측 sticky CTA" width={1440} height={1500}>
+              <PageProductDetail />
+            </DCArtboard>
+            <DCArtboard id="invest-modal" label="투자 실행 모달" sublabel="금액 입력 / 예상 수익 / 약관 / 확정" width={1440} height={1500}>
+              <PageProductDetail withModal />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="manage"
+            title="④ 관리 — 마이페이지"
+            subtitle="투자 후 자산 현황을 확인하고, 예치금을 충전·출금하며 운용"
+          >
+            <DCArtboard id="dashboard" label="대시보드" sublabel="요약 4종 + 수익률 차트 + 다가오는 상환 + 최근 거래" width={1440} height={1140}>
+              <PageDashboard />
+            </DCArtboard>
+            <DCArtboard id="deposit" label="예치금 관리" sublabel="잔액 hero · 충전/출금 · 거래 내역" width={1440} height={1140}>
+              <PageDeposit />
+            </DCArtboard>
+            <DCArtboard id="my-investments" label="내 투자 내역" sublabel="진행중/완료/연체 필터 + 카드 리스트" width={1440} height={1100}>
+              <PageMyInvestments />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="borrow"
+            title="⑤ 대출 — 신청 → 관리 → 상환"
+            subtitle="투자자 반대편의 차주(借主) 사이드. 3단계 신청 → 진행 현황 → 매월 상환"
+          >
+            <DCArtboard id="loan-apply-1" label="대출 신청 · STEP 01" sublabel="목적 / 금액 / 기간" width={1440} height={1080}>
+              <PageLoanApply step={1} />
+            </DCArtboard>
+            <DCArtboard id="loan-apply-2" label="대출 신청 · STEP 02" sublabel="담보 정보 + 자동 LTV 계산" width={1440} height={1080}>
+              <PageLoanApply step={2} />
+            </DCArtboard>
+            <DCArtboard id="loan-apply-3" label="대출 신청 · STEP 03" sublabel="요약 확인 + 약관 동의 + 제출" width={1440} height={1080}>
+              <PageLoanApply step={3} />
+            </DCArtboard>
+            <DCArtboard id="my-loans" label="내 대출 현황" sublabel="진행중 대출 + 심사 신청 현황" width={1440} height={1140}>
+              <PageMyLoans />
+            </DCArtboard>
+            <DCArtboard id="repay" label="상환하기" sublabel="정기 / 일시 상환 + 출금 내역 분해" width={1440} height={1140}>
+              <PageRepay />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="meta"
+            title="⑥ 메타 — 회사·운영·계정"
+            subtitle="서비스 진입 전후로 만나는 마케팅·운영·설정 페이지들"
+          >
+            <DCArtboard id="about" label="서비스 소개" sublabel="에디토리얼 톤 / 원칙 4 / 숫자 / 연혁 / 팀" width={1440} height={2400}>
+              <PageAbout />
+            </DCArtboard>
+            <DCArtboard id="admin" label="관리자 대시보드" sublabel="KPI 6 + 심사 큐 + 리스크 + 활동" width={1440} height={1300}>
+              <PageAdmin />
+            </DCArtboard>
+            <DCArtboard id="notifications" label="알림센터" sublabel="날짜별 그룹 + 카테고리 필터" width={1440} height={900}>
+              <PageNotifications />
+            </DCArtboard>
+            <DCArtboard id="settings" label="계정 설정" sublabel="프로필 / 보안 / 알림 / 계좌 / 종료" width={1440} height={1200}>
+              <PageSettings />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+        </React.Fragment>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
