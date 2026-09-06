@@ -1,25 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { T, Btn } from '../tokens';
-import { BrandWordmark } from '../components/Brand';
-import { AppFooter } from '../components/AppChrome';
+import { AppNav, AppFooter } from '../components/AppChrome';
 
 export default function About() {
   const navigate = useNavigate();
   return (
     <div style={{ background: T.bg, fontFamily: T.fSans, color: T.ink }}>
-      <div style={{ padding: '20px 56px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ cursor: 'pointer' }} onClick={() => navigate('/')}><BrandWordmark size={22} wordSize={17} gap={8} /></div>
-        <div style={{ display: 'flex', gap: 28, fontSize: 14, fontWeight: 500, color: T.ink2 }}>
-          <span onClick={() => navigate('/products')} style={{ cursor: 'pointer' }}>투자상품</span>
-          <span onClick={() => navigate('/loan/apply')} style={{ cursor: 'pointer' }}>대출 신청</span>
-          <span style={{ color: T.ink, paddingBottom: 4, borderBottom: `2px solid ${T.ink}` }}>회사 소개</span>
-          <span onClick={() => navigate('/notifications')} style={{ cursor: 'pointer' }}>고객센터</span>
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <Btn variant="secondary" size="sm" onClick={() => navigate('/login')}>로그인</Btn>
-          <Btn size="sm" onClick={() => navigate('/signup')}>시작하기</Btn>
-        </div>
-      </div>
+      <AppNav />
 
       <div style={{ padding: '80px 56px 96px', display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 40, alignItems: 'end', borderBottom: `1px solid ${T.line}` }}>
         <div>

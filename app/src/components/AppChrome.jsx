@@ -1,27 +1,54 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { T, Btn } from '../tokens';
 import { BrandWordmark } from './Brand';
-import { getCachedUser, logout } from '../api';
+import { getCachedUser } from '../api';
 
 const navLinks = [
   { label: '투자상품', path: '/products' },
   { label: '나의 투자', path: '/my-investments' },
   { label: '대출 신청', path: '/loan/apply' },
-  { label: '고객센터', path: '/notifications' },
 ];
 
-export function AppNav({ notifs = 2 }) {
+const guestLinks = [
+  { label: '투자상품', path: '/products' },
+  { label: '회사소개', path: '/about' },
+];
+
+export function AppNav() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const user = getCachedUser();
+
+  if (!user) {
+    return (
+      <div style={{ padding: '20px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: T.bg, borderBottom: `1px solid ${T.line}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+          <div style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
+            <BrandWordmark size={22} wordSize={17} gap={8} />
+          </div>
+          <div style={{ display: 'flex', gap: 28 }}>
+            {guestLinks.map(l => {
+              const active = pathname.startsWith(l.path);
+              return (
+                <span key={l.label} onClick={() => navigate(l.path)}
+                  style={{ fontSize: 14, fontWeight: 500, color: active ? T.ink : T.ink2, paddingBottom: 4, borderBottom: active ? `2px solid ${T.ink}` : '2px solid transparent', cursor: 'pointer' }}>
+                  {l.label}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span onClick={() => navigate('/login')} style={{ fontSize: 13, color: T.ink2, padding: '8px 14px', cursor: 'pointer' }}>로그인</span>
+          <Btn size="sm" onClick={() => navigate('/signup')}>회원가입</Btn>
+        </div>
+      </div>
+    );
+  }
+
   const balance = Number(user?.balance ?? 0);
   const initial = user?.first_name?.[0] || user?.username?.[0] || '?';
   const links = user?.is_staff ? [...navLinks, { label: '관리자', path: '/admin' }] : navLinks;
-
-  async function handleLogout() {
-    await logout();
-    navigate('/login');
-  }
 
   return (
     <div style={{ padding: '20px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: T.bg, borderBottom: `1px solid ${T.line}` }}>
@@ -45,10 +72,6 @@ export function AppNav({ notifs = 2 }) {
         <div onClick={() => navigate('/deposit')} style={{ background: T.card, borderRadius: T.rPill, padding: '8px 14px', display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, cursor: 'pointer' }}>
           <span style={{ color: T.ink2 }}>예치금</span>
           <span style={{ fontWeight: 600, fontFamily: T.fDisp }}>{balance.toLocaleString()}원</span>
-        </div>
-        <div onClick={() => navigate('/notifications')} style={{ position: 'relative', width: 36, height: 36, borderRadius: T.rPill, background: T.card, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, cursor: 'pointer' }}>
-          🔔
-          {notifs > 0 && <span style={{ position: 'absolute', top: 6, right: 6, width: 8, height: 8, borderRadius: 999, background: '#c4452f' }} />}
         </div>
         <div onClick={() => navigate('/settings')} style={{ width: 36, height: 36, borderRadius: T.rPill, background: T.ink, color: T.card, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>{initial}</div>
       </div>

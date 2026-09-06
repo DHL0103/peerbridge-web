@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { T, Btn, Tag, SectionHeader } from '../tokens';
 import { STATS, fmtKRW, pct } from '../data';
-import { BrandWordmark, IntroAnimation } from '../components/Brand';
-import { getCachedUser, logout, apiGet } from '../api';
+import { BrandWordmark } from '../components/Brand';
+import { AppNav } from '../components/AppChrome';
+import { apiGet } from '../api';
 
 export default function Landing() {
-  const [showIntro, setShowIntro] = useState(() => {
-    if (sessionStorage.getItem('intro_done')) return false;
-    return true;
-  });
   const [loans, setLoans] = useState(null);
 
   useEffect(() => {
@@ -20,13 +17,7 @@ export default function Landing() {
 
   return (
     <>
-      {showIntro && (
-        <IntroAnimation onDone={() => {
-          sessionStorage.setItem('intro_done', '1');
-          setShowIntro(false);
-        }} />
-      )}
-      <LandingNav />
+      <AppNav />
       <Hero loans={loans} />
       <TrustStats />
       <ProductsList loans={loans} />
@@ -37,49 +28,6 @@ export default function Landing() {
       <FinalCTA />
       <Footer />
     </>
-  );
-}
-
-function LandingNav() {
-  const navigate = useNavigate();
-  const user = getCachedUser();
-
-  async function handleLogout() {
-    await logout();
-    navigate('/');
-  }
-
-  return (
-    <div style={{ padding: '24px 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <div style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
-        <BrandWordmark size={26} wordSize={18} gap={8} color={T.ink} />
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-        {[
-          { label: '투자하기', path: '/products' },
-          { label: '진행중인 상품', path: '/products' },
-          { label: '나의 투자', path: '/dashboard' },
-          { label: '리포트', path: '/dashboard' },
-          { label: '회사소개', path: '/about' },
-        ].map((x, i) => (
-          <span key={x.label} onClick={() => navigate(x.path)} style={{ fontSize: 14, fontWeight: 500, color: i === 0 ? T.ink : T.ink2, cursor: 'pointer' }}>{x.label}</span>
-        ))}
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        {user ? (
-          <>
-            {user.is_staff && <span onClick={() => navigate('/admin')} style={{ fontSize: 13, color: T.ink2, padding: '8px 14px', cursor: 'pointer' }}>관리자</span>}
-            <span onClick={() => navigate('/dashboard')} style={{ fontSize: 13, color: T.ink2, padding: '8px 14px', cursor: 'pointer' }}>대시보드</span>
-            <Btn size="sm" variant="secondary" onClick={handleLogout}>로그아웃</Btn>
-          </>
-        ) : (
-          <>
-            <span onClick={() => navigate('/login')} style={{ fontSize: 13, color: T.ink2, padding: '8px 14px', cursor: 'pointer' }}>로그인</span>
-            <Btn size="sm" onClick={() => navigate('/signup')}>회원가입</Btn>
-          </>
-        )}
-      </div>
-    </div>
   );
 }
 
@@ -369,7 +317,7 @@ function Footer() {
   const groups = [
     { t: '서비스', items: [{ l: '투자하기', p: '/products' }, { l: '진행중인 상품', p: '/products' }, { l: '나의 투자', p: '/dashboard' }, { l: '리포트', p: '/dashboard' }, { l: '수익률 계산기', p: '/products' }] },
     { t: '회사', items: [{ l: '회사소개', p: '/about' }, { l: '심사역 소개', p: '/about' }, { l: '뉴스룸', p: '/about' }, { l: '채용', p: '/about' }, { l: '공지사항', p: '/about' }] },
-    { t: '고객지원', items: [{ l: '고객센터', p: '/notifications' }, { l: '1:1 상담', p: '/notifications' }, { l: '자주 묻는 질문', p: '/' }, { l: '투자자 가이드', p: '/' }, { l: '보안 정책', p: '/' }] },
+    { t: '고객지원', items: [{ l: '자주 묻는 질문', p: '/' }, { l: '투자자 가이드', p: '/' }, { l: '보안 정책', p: '/' }] },
     { t: '법적 고지', items: [{ l: '이용약관' }, { l: '개인정보처리방침' }, { l: '위험고지서' }, { l: '상품설명서' }, { l: '전자금융거래약관' }] },
   ];
   return (
