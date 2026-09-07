@@ -6,6 +6,7 @@ import { getCachedUser } from '../api';
 const navLinks = [
   { label: '투자상품', path: '/products' },
   { label: '나의 투자', path: '/my-investments' },
+  { label: '내 대출', path: '/my-loans' },
   { label: '대출 신청', path: '/loan/apply' },
 ];
 
