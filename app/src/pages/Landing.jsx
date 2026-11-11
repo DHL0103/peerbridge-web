@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { T, Btn, Tag, SectionHeader } from '../tokens';
-import { STATS, fmtKRW, pct } from '../data';
+import { fmtKRW, pct } from '../data';
 import { BrandWordmark } from '../components/Brand';
 import { AppNav } from '../components/AppChrome';
 import { apiGet } from '../api';
@@ -19,10 +19,8 @@ export default function Landing() {
     <>
       <AppNav />
       <Hero loans={loans} />
-      <TrustStats />
       <ProductsList loans={loans} />
       <HowItWorks />
-      <TrustSafety />
       <Calculator />
       <FAQ />
       <FinalCTA />
@@ -48,7 +46,7 @@ function Hero({ loans }) {
             작게, 자주,<br /><span style={{ color: T.ink3 }}>오래.</span>
           </h1>
           <p style={{ fontSize: 18, color: T.ink2, marginTop: 28, lineHeight: 1.6, maxWidth: 520 }}>
-            1만 원부터 시작하는 분산 투자.<br />복잡한 금융 상품을 아주 단순한 형태로 다시 설계했습니다.
+            소액으로 시작하는 분산 투자.<br />복잡한 금융 상품을 아주 단순한 형태로 다시 설계했습니다.
           </p>
           <div style={{ display: 'flex', gap: 12, marginTop: 36 }}>
             <Btn size="lg" onClick={() => navigate('/signup')}>3분만에 시작하기 →</Btn>
@@ -85,30 +83,6 @@ function FeaturedCard({ p }) {
         <div style={{ height: 6, borderRadius: T.rPill, background: T.bg, overflow: 'hidden' }}>
           <div style={{ width: pct(raised), height: '100%', background: T.ink }} />
         </div>
-      </div>
-    </div>
-  );
-}
-
-function TrustStats() {
-  const items = [
-    { k: '누적 투자액', v: STATS.cumulativeInvestment, unit: '원', sub: '2019년 서비스 시작 이후' },
-    { k: '평균 수익률', v: STATS.avgReturn, unit: '%', sub: '세전 · 가중 평균', accent: true },
-    { k: '누적 부실률', v: STATS.defaultRate, unit: '%', sub: '업계 평균 대비 1/8 수준' },
-  ];
-  return (
-    <div style={{ padding: '32px 56px' }}>
-      <div style={{ background: T.card, borderRadius: T.rXl, padding: '40px 48px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
-        {items.map((s, i) => (
-          <div key={s.k} style={{ padding: '0 32px', borderRight: i < 2 ? `1px solid ${T.line}` : 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div style={{ fontSize: 13, color: T.ink2 }}>{s.k}</div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-              <span style={{ fontFamily: T.fDisp, fontSize: 56, fontWeight: 600, letterSpacing: -2.5, color: s.accent ? T.green : T.ink, lineHeight: 1 }}>{s.v}</span>
-              <span style={{ fontSize: 22, color: s.accent ? T.green : T.ink2, fontWeight: 500 }}>{s.unit}</span>
-            </div>
-            <div style={{ fontSize: 12, color: T.ink3 }}>{s.sub}</div>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -162,9 +136,9 @@ function ProductCard({ p }) {
 
 function HowItWorks() {
   const steps = [
-    { n: '01', title: '심사역이 직접 검토', body: '평균 18년 경력의 심사역이 차주사 현장 실사부터 담보 평가까지 한 건 한 건 직접 검토합니다.' },
-    { n: '02', title: '한 곳에 분산 투자', body: '1만 원부터 여러 상품에 나눠 투자하세요. 부동산·동산·신용 등 자산 클래스별로 자동 분산해주는 포트폴리오 모드도 제공합니다.' },
-    { n: '03', title: '매주 현장 리포트', body: '투자한 상품의 차주사 현장 사진과 진척 상황을 매주 메일로 받아보세요. 위험 신호는 일어나기 전에 먼저 알려드립니다.' },
+    { n: '01', title: '관리자 심사 후 금리 확정', body: '차주는 신청 시 금리를 정하지 않습니다. 관리자가 신용도를 보고 심사 시점에 금리를 책정해 승인합니다.' },
+    { n: '02', title: '소액으로 분산 투자', body: '여러 상품에 나눠 투자할 수 있습니다. 투자금은 각 상품의 모집 비율에 따라 누적됩니다.' },
+    { n: '03', title: '상환 시 비율대로 자동 분배', body: '차주가 회차를 상환하면 투자 비율에 따라 투자자에게 자동으로 분배되고, 거래내역에서 바로 확인할 수 있습니다.' },
   ];
   return (
     <div style={{ padding: '80px 56px' }}>
@@ -177,37 +151,6 @@ function HowItWorks() {
             <p style={{ fontSize: 14, color: T.ink2, lineHeight: 1.65, margin: 0 }}>{s.body}</p>
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-function TrustSafety() {
-  const items = [
-    { k: '0.41%', sub: '누적 부실률', body: '7년간 누적 1.2조 원 운용 중 부실 발생액 49억 원. 업계 평균 3.2% 대비 1/8 수준.' },
-    { k: '100%', sub: '담보 우선순위', body: '부동산 상품은 모두 선·후순위가 명확한 담보 기반. 평균 LTV 62% 유지.' },
-    { k: '주 1회', sub: '현장 리포트', body: '심사 이후에도 매주 차주사 영업 현황과 담보 가치를 점검해 투자자에게 공유합니다.' },
-    { k: '예치금 분리', sub: '신탁사 보관', body: '투자자 예치금은 KB국민은행 신탁계정에 별도 보관. 회사 운영자금과 완전 분리됩니다.' },
-  ];
-  return (
-    <div style={{ padding: '80px 56px', background: T.bgSoft }}>
-      <SectionHeader kicker="RISK & SAFETY"
-        title={<>위험은 사라지지 않습니다.<br /><span style={{ color: T.ink3 }}>다만 먼저 알 수 있을 뿐.</span></>}
-        sub="투자 손실의 가능성을 솔직하게 다루고, 그 가능성을 줄이는 데 모든 자원을 씁니다." />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: T.gap }}>
-        {items.map(it => (
-          <div key={it.sub} style={{ background: T.card, borderRadius: T.rLg, padding: 32, display: 'grid', gridTemplateColumns: '180px 1fr', gap: 24, alignItems: 'center' }}>
-            <div>
-              <div style={{ fontFamily: T.fDisp, fontSize: 44, fontWeight: 600, color: T.ink, letterSpacing: -1.8, lineHeight: 1 }}>{it.k}</div>
-              <div style={{ fontSize: 12, color: T.ink2, marginTop: 8 }}>{it.sub}</div>
-            </div>
-            <div style={{ fontSize: 14, color: T.ink2, lineHeight: 1.65, borderLeft: `1px solid ${T.line}`, paddingLeft: 24 }}>{it.body}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ marginTop: T.gap, padding: '20px 28px', borderRadius: T.rMd, border: `1px dashed ${T.lineStrong}`, fontSize: 12, color: T.ink2, lineHeight: 1.6 }}>
-        <b style={{ color: T.ink, fontWeight: 600 }}>투자 위험 고지</b>
-        &nbsp;&nbsp;원금 손실의 가능성이 있는 상품입니다. 과거 수익률이 미래 수익률을 보장하지 않으며, 투자 전 상품설명서·위험고지서를 반드시 확인해주세요.
       </div>
     </div>
   );
@@ -264,12 +207,11 @@ function CalcRow({ k, v, muted }) {
 function FAQ() {
   const [open, setOpen] = useState(0);
   const items = [
-    { q: '최소 투자 금액은 얼마인가요?', a: '상품당 1만 원부터 가능합니다. 분산 투자를 위해 한 상품 최대 투자 한도(보통 모집액의 5%)가 있습니다.' },
-    { q: '원금이 보장되나요?', a: '보장되지 않습니다. peerbridge의 모든 상품은 원금 손실 가능성이 있는 투자상품이며, 7년간 누적 부실률은 0.41%입니다.' },
-    { q: '세금은 어떻게 처리되나요?', a: '발생한 이자수익에 대해 15.4%가 원천징수되며, peerbridge가 자동으로 처리합니다.' },
-    { q: '투자한 돈은 중도에 회수할 수 있나요?', a: '원칙적으로 만기 전 회수는 불가능합니다. 단, 일부 상품은 양도 게시판을 통해 다른 투자자에게 양도할 수 있습니다.' },
-    { q: '예치금은 안전하게 보관되나요?', a: 'KB국민은행 신탁계정에 별도 보관됩니다. peerbridge의 운영자금과 완전히 분리되어 있습니다.' },
-    { q: '심사역이 누구인지 알 수 있나요?', a: '회사소개 페이지에서 심사역 8명의 이력과 담당 자산 클래스를 확인할 수 있습니다.' },
+    { q: '최소 투자 금액이 정해져 있나요?', a: '별도의 최소/최대 한도는 두지 않았습니다. 상품 상세 페이지에서 투자 가능한 잔여 모집 금액을 확인할 수 있습니다.' },
+    { q: '원금이 보장되나요?', a: '보장되지 않습니다. peerbridge의 모든 상품은 원금 손실 가능성이 있는 투자상품입니다.' },
+    { q: '투자한 돈은 중도에 회수할 수 있나요?', a: '원칙적으로 만기 전 회수는 불가능합니다.' },
+    { q: '예치금은 어떻게 관리되나요?', a: '예치금은 플랫폼 내 가상 잔액으로 관리되며, 충전·투자·분배 등 모든 자금 이동은 거래내역(원장)에 투명하게 기록됩니다.' },
+    { q: '대출 금리는 누가, 어떻게 정하나요?', a: '차주는 신청 시 금리를 정하지 않습니다. 관리자가 신용도를 보고 심사 시점에 금리를 책정해 승인합니다.' },
   ];
   return (
     <div style={{ padding: '80px 56px' }}>
@@ -298,14 +240,13 @@ function FinalCTA() {
     <div style={{ padding: '40px 56px 80px' }}>
       <div style={{ background: T.card, borderRadius: T.rXl, padding: '72px 56px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: T.fDisp, fontSize: 64, fontWeight: 600, letterSpacing: -2.5, lineHeight: 1.05, margin: 0, color: T.ink }}>
-          시작은 1만 원이면<br />충분합니다.
+          소액으로도<br />충분합니다.
         </h2>
         <p style={{ fontSize: 16, color: T.ink2, marginTop: 20, lineHeight: 1.6 }}>
-          가입부터 첫 투자까지 평균 3분.<br />본인인증과 계좌 연결만 하면 끝입니다.
+          회원가입 후 바로 투자를 시작할 수 있습니다.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 32 }}>
           <Btn size="lg" onClick={() => navigate('/signup')}>지금 시작하기 →</Btn>
-          <Btn size="lg" variant="ghost">앱 다운로드</Btn>
         </div>
       </div>
     </div>
@@ -315,18 +256,16 @@ function FinalCTA() {
 function Footer() {
   const navigate = useNavigate();
   const groups = [
-    { t: '서비스', items: [{ l: '투자하기', p: '/products' }, { l: '진행중인 상품', p: '/products' }, { l: '나의 투자', p: '/dashboard' }, { l: '리포트', p: '/dashboard' }, { l: '수익률 계산기', p: '/products' }] },
-    { t: '회사', items: [{ l: '회사소개', p: '/about' }, { l: '심사역 소개', p: '/about' }, { l: '뉴스룸', p: '/about' }, { l: '채용', p: '/about' }, { l: '공지사항', p: '/about' }] },
-    { t: '고객지원', items: [{ l: '자주 묻는 질문', p: '/' }, { l: '투자자 가이드', p: '/' }, { l: '보안 정책', p: '/' }] },
-    { t: '법적 고지', items: [{ l: '이용약관' }, { l: '개인정보처리방침' }, { l: '위험고지서' }, { l: '상품설명서' }, { l: '전자금융거래약관' }] },
+    { t: '서비스', items: [{ l: '투자하기', p: '/products' }, { l: '진행중인 상품', p: '/products' }, { l: '나의 투자', p: '/dashboard' }] },
+    { t: '회사', items: [{ l: '소개', p: '/about' }, { l: '자주 묻는 질문', p: '/' }] },
   ];
   return (
     <div style={{ padding: '80px 56px 56px', background: T.ink, color: T.card }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: 48, marginBottom: 64 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 48, marginBottom: 64 }}>
         <div>
           <div style={{ marginBottom: 20 }}><BrandWordmark size={26} wordSize={18} gap={10} color={T.card} /></div>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', lineHeight: 1.65, margin: 0, maxWidth: 320 }}>
-            peerbridge는 작고 자주, 오래 가는 자산을 만드는 사람들을 위한 분산 투자 플랫폼입니다.
+            peerbridge는 P2P 대출 전 사이클(모집·투자·상환·분배)을 보여주는 개인 포트폴리오용 시뮬레이션 프로젝트입니다. 실제 금융 서비스가 아닙니다.
           </p>
         </div>
         {groups.map(g => (
@@ -341,7 +280,7 @@ function Footer() {
         ))}
       </div>
       <div style={{ paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.10)', fontSize: 11, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
-        (주)피어브릿지 · 대표 김신뢰 · 사업자등록번호 123-45-67890 · 서울시 강남구 테헤란로 123, 8층 · 금융위원회 등록 온라인투자연계금융업자(2021-XX-001) · © 2026 peerbridge.
+        © 2026 peerbridge. 포트폴리오 데모 프로젝트입니다.
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export default function Login() {
             작게, 자주,<br /><span style={{ color: 'rgba(255,255,255,0.45)' }}>오래.</span>
           </div>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, marginTop: 24, maxWidth: 380 }}>
-            7년간 누적 부실률 0.41%. 심사역이 한 건 한 건 직접 검토한 14개 상품을 만나보세요.
+            관리자가 심사·승인한 상품만 모집됩니다.
           </p>
         </div>
       </div>
