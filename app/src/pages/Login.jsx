@@ -41,14 +41,6 @@ export default function Login() {
             7년간 누적 부실률 0.41%. 심사역이 한 건 한 건 직접 검토한 14개 상품을 만나보세요.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)' }}>
-          {[['8,742억', '누적 투자액'], ['9.3%', '평균 수익률'], ['127K', '활성 투자자']].map(([v, k]) => (
-            <div key={k}>
-              <div style={{ fontFamily: T.fDisp, fontSize: 22, fontWeight: 600 }}>{v}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', marginTop: 2 }}>{k}</div>
-            </div>
-          ))}
-        </div>
       </div>
 
       <div style={{ padding: 56, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
